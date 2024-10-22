@@ -2,9 +2,14 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
+
   const [textColor, setTextColor] = useState('black')
   const [bgColor, setBgColor] = useState('yellow')
 
+  const changeColor = (paramTextColor, paramBgColor) => {
+    setTextColor(paramBgColor);
+    setBgColor(paramTextColor)
+  }
   return (
     <>
       <h1>Text Bg Color Tester</h1>
@@ -19,6 +24,19 @@ function App() {
       </div>
       <p className="read-the-docs">
         click to change color
+      </p>
+      <p className="">
+        <button onClick={() => changeColor('yellow', 'black')}>
+          yellow + black
+        </button>
+
+        <button onClick={() => changeColor('red', 'brown')}>
+          red + blown
+        </button>
+        
+        <button onClick={() => changeColor('black', 'white')}>
+          black + white
+        </button>
       </p>
     </>
   )
