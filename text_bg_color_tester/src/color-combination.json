@@ -1,0 +1,6 @@
+[
+  { "textColor": "black", "bgColor": "yellow" },
+  { "textColor": "white", "bgColor": "blue" },
+  { "textColor": "green", "bgColor": "pink" },
+  { "textColor": "red", "bgColor": "gray" }
+]
