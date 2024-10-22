@@ -11,3 +11,5 @@
       - [ ] italic or not
       - [ ] size 
       - etc..
+- add demo using cloud computin (maybe 'vercel'?)
+- add screen shot
