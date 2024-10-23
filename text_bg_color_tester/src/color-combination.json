@@ -2,5 +2,6 @@
   { "textColor": "black", "bgColor": "yellow" },
   { "textColor": "white", "bgColor": "blue" },
   { "textColor": "green", "bgColor": "pink" },
+  { "textColor": "#392f22", "bgColor": "#ffebd0" },
   { "textColor": "red", "bgColor": "gray" }
 ]

@@ -13,6 +13,12 @@ function App() {
     setBgColor(paramTextColor)
   };
 
+  const generateRandomCombination = () => {
+    const randomTextColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    const randomBgColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    changeColor(randomTextColor, randomBgColor);
+  };
+
   return (
     <>
       <h1>Text Bg Color Tester</h1>
@@ -43,6 +49,7 @@ function App() {
             {color.textColor} + {color.bgColor}
           </button>
         ))}
+        <button onClick={() => generateRandomCombination()}> random </button>
       </div>
 
 
