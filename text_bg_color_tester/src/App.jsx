@@ -1,11 +1,22 @@
-import { useState } from 'react'
-import './App.css'
-import './IBM_Plex_Sans.css'
-import colors from './color-combination.json'
+import { useState, useEffect } from 'react'
+
 import LoremIpsum from './components/LoremIpsum'
 
-function App() {
+import './App.css'
+import './IBM_Plex_Sans.css'
 
+function App() {  
+  
+  const [colors, setColors] = useState([]);
+
+  useEffect(() => {
+    fetch('/color-combination.json')
+      .then(response => response.json())
+      .then(data => setColors(data))
+      .catch(error => console.error('Failed to load colors:', error));
+  }, []);
+  
+  console.log(colors)
   const [textColor, setTextColor] = useState('white');
   const [bgColor, setBgColor] = useState('black');
 
