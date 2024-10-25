@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import LoremIpsum from './components/LoremIpsum'
+import ColorSelectionButton from './components/ColorSelectionButton'
 
 import './App.css'
 import './IBM_Plex_Sans.css'
@@ -16,7 +17,6 @@ function App() {
       .catch(error => console.error('Failed to load colors:', error));
   }, []);
   
-  console.log(colors)
   const [textColor, setTextColor] = useState('white');
   const [bgColor, setBgColor] = useState('black');
 
@@ -52,17 +52,14 @@ function App() {
       
       <div className='button-container'>
         {colors.map((color, index) => (
-          <button
+          <ColorSelectionButton
             key={index}
-            onClick={() => changeColor(color.textColor, color.bgColor)}
-            style={{
-              backgroundColor: color.bgColor,
-              color: color.textColor,
-            }}
-          >
-            {color.textColor} + {color.bgColor}
-          </button>
+            textColor={color.textColor}
+            bgColor={color.bgColor}
+            changeColor={changeColor}
+          />
         ))}
+        
         <button onClick={() => generateRandomCombination()}> random </button>
       </div>
 
