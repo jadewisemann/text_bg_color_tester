@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, isValidElement } from 'react'
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
@@ -26,23 +26,24 @@ function App() {
   //     .then(data => setColors(...data))
   //     .catch(error => console.error('Failed to load colors:', error));
   // }, []);
+  const isValidHex = color => /^#([0-9A-Fa-f]{6})$/.test(color);
   
-
   const handleColorChange = (paramTextColor, paramBgColor) => {
-    setTextColor(paramBgColor);
-    setBgColor(paramTextColor)
+    if (isValidHex(paramTextColor)) setTextColor(paramTextColor)
+    if (isValidHex(paramBgColor)) setBgColor(paramBgColor)
   };
-
+  
   const addColor = () => {
-    if (newTextColor && newBgColor) {
+    if (isValidHex(newTextColor) && isValidHex(newBgColor)) {
       const updatedColors = [...colors, { textColor: newTextColor, bgColor: newBgColor }];
       setColors(updatedColors); 
       localStorage.setItem('colors', JSON.stringify(updatedColors));
       setNewTextColor('');
       setNewBgColor('');
+    } else {
+      alert("hex error")
     }
   }
-
   const generateRandomCombination = () => {
     const randomTextColor = '#' + Math.floor(Math.random()*16777215).toString(16);
     const randomBgColor = '#' + Math.floor(Math.random()*16777215).toString(16);
@@ -81,47 +82,54 @@ function App() {
         <button onClick={() => generateRandomCombination()}> random </button>
       </div>
       
-      <div className="input-container">
-        <input
-          type="color"
-          value={newTextColor}
-          onChange={(e) => {
-            setNewTextColor(e.target.value);
-            handleColorChange(e.target.value, bgColor);
-          }}
-        />
-        <input
-          type="color"
-          value={newBgColor}
-          onChange={(e) => {
-            setNewBgColor(e.target.value);
-            handleColorChange(textColor, e.target.value);
-          }}
-        />
-        <button onClick={addColor}>Add Color</button>
-      </div>
 
       <div className="input-container">
-        <input
-          type="text"
-          placeholder="Text Color (e.g., #000000)"
-          value={newTextColor}
-          onChange={(e) => {
-            setNewTextColor(e.target.value);
-            handleColorChange(e.target.value, bgColor);
-          }}
-          maxLength={7}
-        />
-        <input
-          type="text"
-          placeholder="Background Color (e.g., #FFFFFF)"
-          value={newBgColor}
-          onChange={(e) => {
-            setNewBgColor(e.target.value);
-            handleColorChange(textColor, e.target.value);
-          }}
-          maxLength={7}
-        />
+        <div>
+          <label>Text Color:</label>
+          <input
+            type="color"
+            value={newTextColor}
+            onChange={(e) => {
+              setNewTextColor(e.target.value);
+              handleColorChange(e.target.value, bgColor);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="#000000"
+            value={newTextColor}
+            onChange={(e) => {
+              const value = e.target.value;
+              setNewTextColor(value);
+              handleColorChange(value, bgColor);
+            }}
+            maxLength={7}
+          />
+        </div>
+
+        <div>
+          <label>Background Color:</label>
+          <input
+            type="color"
+            value={newBgColor}
+            onChange={(e) => {
+              setNewBgColor(e.target.value);
+              handleColorChange(textColor, e.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="#FFFFFF"
+            value={newBgColor}
+            onChange={(e) => {
+              const value = e.target.value;
+              setNewBgColor(value);
+              handleColorChange(textColor, value);
+            }}
+            maxLength={7}
+          />
+        </div>
+
         <button onClick={addColor}>Add Color</button>
       </div>
 
