@@ -1,4 +1,4 @@
-import { useState, useEffect, isValidElement } from 'react'
+import { useState, useEffect } from 'react'
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
@@ -20,27 +20,52 @@ function App() {
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] = useState('')
   
+
   const removeDuplicates = colorArray => {
     return colorArray.filter(
       (color, index, self) =>
-        index ===
-        self.findIndex(
+        index === self.findIndex(
           c =>
             c.textColor === color.textColor && c.bgColor === color.bgColor
         )
     );
   }
 
+  const saveColorsToLocalStorage = (newColors) => {
+    localStorage.setItem('colors', JSON.stringify(newColors));
+  };
+
+  const fetchColorsFromJson = async () => {
+      try {
+        const response = await fetch('/color-combination.json');
+        const data = await response.json();
+        const updatedColors = removeDuplicates(data);
+        return updatedColors
+      } catch (error) {
+        console.error('Failed to load colors:', error);
+        return []
+      }
+    };
+
   useEffect(() => {
-    fetch('/color-combination.json')
-      .then((response) => response.json())
-      .then((data) => {
-        setColors((prevColors) =>
-          removeDuplicates([...data, ...prevColors]));
-      })
-      .catch((error) => console.error('Failed to load colors:', error));
+    const loadColors = async () => {
+      const jsonColors = await fetchColorsFromJson();
+      const updatedColors = removeDuplicates([...jsonColors, ...initialColors])
+      setColors(updatedColors)
+    };
+
+    loadColors();
   }, []);
 
+  const resetLocalStorage = async () => {
+    localStorage.removeItem('colors');
+    const jsonColors = await fetchColorsFromJson();
+    setColors(jsonColors);
+    saveColorsToLocalStorage(jsonColors);
+    setTextColor('white')
+    setBgColor('black')
+  };
+  
   const isValidHex = color => /^#([0-9A-Fa-f]{6})$/.test(color);
   
   const handleColorChange = (paramTextColor, paramBgColor) => {
@@ -59,6 +84,7 @@ function App() {
       alert("hex error")
     }
   }
+
   const generateRandomCombination = () => {
     const randomTextColor = '#' + Math.floor(Math.random()*16777215).toString(16);
     const randomBgColor = '#' + Math.floor(Math.random()*16777215).toString(16);
@@ -146,6 +172,12 @@ function App() {
         </div>
 
         <button onClick={addColor}>Add Color</button>
+      </div>
+      
+      <div>
+        <button onClick={resetLocalStorage} style={{ marginTop: '20px' }}>
+          Reset Colors
+        </button>
       </div>
 
     </>
