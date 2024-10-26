@@ -18,13 +18,25 @@ function App() {
   const [bgColor, setBgColor] = useState('black');
 
   const [newTextColor, setNewTextColor] =useState('')
-  const [newBgColor, setNewBgColor] =useState('')
+  const [newBgColor, setNewBgColor] = useState('')
+  
+  const removeDuplicates = colorArray => {
+    return colorArray.filter(
+      (color, index, self) =>
+        index ===
+        self.findIndex(
+          c =>
+            c.textColor === color.textColor && c.bgColor === color.bgColor
+        )
+    );
+  }
 
   useEffect(() => {
     fetch('/color-combination.json')
       .then((response) => response.json())
       .then((data) => {
-        setColors((prevColors) => [...data, ...prevColors]);
+        setColors((prevColors) =>
+          removeDuplicates([...data, ...prevColors]));
       })
       .catch((error) => console.error('Failed to load colors:', error));
   }, []);
