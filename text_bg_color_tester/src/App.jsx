@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef } from 'react'
+
+import { fetchFromJson, isValidColor } from './utils'
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
@@ -20,61 +22,43 @@ function App() {
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] = useState('')
   
-
-  const removeDuplicates = colorArray => {
-    return colorArray.filter(
-      (color, index, self) =>
-        index === self.findIndex(
-          c =>
-            c.textColor === color.textColor && c.bgColor === color.bgColor
-        )
-    );
-  }
-
-  const saveColorsToLocalStorage = (newColors) => {
-    localStorage.setItem('colors', JSON.stringify(newColors));
-  };
-
-  const fetchColorsFromJson = async () => {
-      try {
-        const response = await fetch('/color-combination.json');
-        const data = await response.json();
-        const updatedColors = removeDuplicates(data);
-        return updatedColors
-      } catch (error) {
-        console.error('Failed to load colors:', error);
-        return []
-      }
-    };
+  const [jsonColors, setJsonColors] = useState([])
+  
 
   useEffect(() => {
     const loadColors = async () => {
-      const jsonColors = await fetchColorsFromJson();
-      const updatedColors = removeDuplicates([...jsonColors, ...initialColors])
-      setColors(updatedColors)
+      const jsonColors = await fetchFromJson('/color-combination.json');
+      setJsonColors(jsonColors)
+      setColors([...jsonColors, ...initialColors])
     };
 
     loadColors();
   }, []);
 
-  const resetLocalStorage = async () => {
+
+  const resetLocalStorage = (defaultColors) => {
     localStorage.removeItem('colors');
-    const jsonColors = await fetchColorsFromJson();
-    setColors(jsonColors);
-    saveColorsToLocalStorage(jsonColors);
-    setTextColor('white')
-    setBgColor('black')
+    localStorage.setItem('colors', JSON.stringify(defaultColors))
   };
   
-  const isValidHex = color => /^#([0-9A-Fa-f]{6})$/.test(color);
+  const setToDefault = (defaultColors) => {
+    setColors(defaultColors);
+    setTextColor('black')
+    setBgColor('white')
+  }
   
+  const resetButtonHandler = () => {
+    resetLocalStorage(jsonColors)
+    setToDefault(jsonColors)
+  }
+
   const handleColorChange = (paramTextColor, paramBgColor) => {
-    if (isValidHex(paramTextColor)) setTextColor(paramTextColor)
-    if (isValidHex(paramBgColor)) setBgColor(paramBgColor)
+    if (isValidColor(paramTextColor)) setTextColor(paramTextColor)
+    if (isValidColor(paramBgColor)) setBgColor(paramBgColor)
   };
   
   const addColor = () => {
-    if (isValidHex(newTextColor) && isValidHex(newBgColor)) {
+    if (isValidColor(newTextColor) && isValidColor(newBgColor)) {
       const updatedColors = [...colors, { textColor: newTextColor, bgColor: newBgColor }];
       setColors(updatedColors); 
       localStorage.setItem('colors', JSON.stringify(updatedColors));
@@ -175,11 +159,10 @@ function App() {
       </div>
       
       <div>
-        <button onClick={resetLocalStorage} style={{ marginTop: '20px' }}>
+        <button onClick={resetButtonHandler} style={{ marginTop: '20px' }}>
           Reset Colors
         </button>
       </div>
-
     </>
   )
 }
