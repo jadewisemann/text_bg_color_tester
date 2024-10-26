@@ -101,6 +101,30 @@ function App() {
         <button onClick={addColor}>Add Color</button>
       </div>
 
+      <div className="input-container">
+        <input
+          type="text"
+          placeholder="Text Color (e.g., #000000)"
+          value={newTextColor}
+          onChange={(e) => {
+            setNewTextColor(e.target.value);
+            handleColorChange(e.target.value, bgColor);
+          }}
+          maxLength={7}
+        />
+        <input
+          type="text"
+          placeholder="Background Color (e.g., #FFFFFF)"
+          value={newBgColor}
+          onChange={(e) => {
+            setNewBgColor(e.target.value);
+            handleColorChange(textColor, e.target.value);
+          }}
+          maxLength={7}
+        />
+        <button onClick={addColor}>Add Color</button>
+      </div>
+
     </>
   )
 }
