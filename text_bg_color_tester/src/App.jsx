@@ -20,12 +20,15 @@ function App() {
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] =useState('')
 
-  // useEffect(() => {
-  //   fetch('/color-combination.json')
-  //     .then(response => response.json())
-  //     .then(data => setColors(...data))
-  //     .catch(error => console.error('Failed to load colors:', error));
-  // }, []);
+  useEffect(() => {
+    fetch('/color-combination.json')
+      .then((response) => response.json())
+      .then((data) => {
+        setColors((prevColors) => [...data, ...prevColors]);
+      })
+      .catch((error) => console.error('Failed to load colors:', error));
+  }, []);
+
   const isValidHex = color => /^#([0-9A-Fa-f]{6})$/.test(color);
   
   const handleColorChange = (paramTextColor, paramBgColor) => {
