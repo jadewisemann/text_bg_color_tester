@@ -6,29 +6,47 @@ import ColorSelectionButton from './components/ColorSelectionButton'
 import './App.css'
 import './IBM_Plex_Sans.css'
 
+const initialColors = JSON.parse(localStorage.getItem('colors')) || [
+  { textColor: 'black', bgColor: 'yellow' },
+  { textColor: 'white', bgColor: 'blue' },
+]
+
 function App() {  
   
-  const [colors, setColors] = useState([]);
-
-  useEffect(() => {
-    fetch('/color-combination.json')
-      .then(response => response.json())
-      .then(data => setColors(data))
-      .catch(error => console.error('Failed to load colors:', error));
-  }, []);
-  
+  const [colors, setColors] = useState(initialColors);
   const [textColor, setTextColor] = useState('white');
   const [bgColor, setBgColor] = useState('black');
 
-  const changeColor = (paramTextColor, paramBgColor) => {
+  const [newTextColor, setNewTextColor] =useState('')
+  const [newBgColor, setNewBgColor] =useState('')
+
+  // useEffect(() => {
+  //   fetch('/color-combination.json')
+  //     .then(response => response.json())
+  //     .then(data => setColors(...data))
+  //     .catch(error => console.error('Failed to load colors:', error));
+  // }, []);
+  
+
+  const handleColorChange = (paramTextColor, paramBgColor) => {
     setTextColor(paramBgColor);
     setBgColor(paramTextColor)
   };
 
+  const addColor = () => {
+    if (newTextColor && newBgColor) {
+      const updatedColors = [...colors, { textColor: newTextColor, bgColor: newBgColor }];
+      setColors(updatedColors); 
+      localStorage.setItem('colors', JSON.stringify(updatedColors));
+      setNewTextColor('');
+      setNewBgColor('');
+    }
+  }
+
   const generateRandomCombination = () => {
     const randomTextColor = '#' + Math.floor(Math.random()*16777215).toString(16);
     const randomBgColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-    changeColor(randomTextColor, randomBgColor);
+    handleColorChange(randomTextColor, randomBgColor);
   };
 
   return (
@@ -56,13 +74,32 @@ function App() {
             key={index}
             textColor={color.textColor}
             bgColor={color.bgColor}
-            changeColor={changeColor}
+            changeColor={handleColorChange}
           />
         ))}
-        
+
         <button onClick={() => generateRandomCombination()}> random </button>
       </div>
-
+      
+      <div className="input-container">
+        <input
+          type="color"
+          value={newTextColor}
+          onChange={(e) => {
+            setNewTextColor(e.target.value);
+            handleColorChange(e.target.value, bgColor);
+          }}
+        />
+        <input
+          type="color"
+          value={newBgColor}
+          onChange={(e) => {
+            setNewBgColor(e.target.value);
+            handleColorChange(textColor, e.target.value);
+          }}
+        />
+        <button onClick={addColor}>Add Color</button>
+      </div>
 
     </>
   )
