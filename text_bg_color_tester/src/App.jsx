@@ -1,6 +1,6 @@
 import { useState, useEffect,useRef } from 'react'
 
-import { fetchFromJson, isValidColor } from './utils'
+import { fetchFromJson, isValidColor, removeDuplicates } from './utils'
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
@@ -29,7 +29,7 @@ function App() {
     const loadColors = async () => {
       const jsonColors = await fetchFromJson('/color-combination.json');
       setJsonColors(jsonColors)
-      setColors([...jsonColors, ...initialColors])
+      setColors(removeDuplicates([...jsonColors, ...initialColors]))
     };
 
     loadColors();
@@ -69,11 +69,19 @@ function App() {
     }
   }
 
-  const generateRandomCombination = () => {
-    const randomTextColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-    const randomBgColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-    handleColorChange(randomTextColor, randomBgColor);
+  const generateRandomColor = () => {
+    return '#' + Math.floor(Math.random()*16777215).toString(16);
   };
+  
+  const randomButtonHandler = () => {
+    const randomBgColor = generateRandomColor()
+    const randomTextColor = generateRandomColor()
+    handleColorChange(randomTextColor, randomBgColor);
+    setNewTextColor(randomTextColor);
+    setNewBgColor(randomBgColor);
+  }
+
+  
 
   return (
     <>
@@ -104,7 +112,7 @@ function App() {
           />
         ))}
 
-        <button onClick={() => generateRandomCombination()}> random </button>
+        <button onClick={() => randomButtonHandler()}> random </button>
       </div>
       
 
