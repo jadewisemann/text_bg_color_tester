@@ -1,4 +1,3 @@
-// fetch 
 export const fetchFromJson = async (domain) => {
   try {
     const response = await fetch(domain);
@@ -33,3 +32,8 @@ const HEX_COLOR_PATTERN = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
 export const isValidColor = color => 
   SAFE_COLOR_NAMES.has(color.toLowerCase()) || HEX_COLOR_PATTERN.test(color);
+
+export const generateRandomColor = () => {
+  return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+};
+  

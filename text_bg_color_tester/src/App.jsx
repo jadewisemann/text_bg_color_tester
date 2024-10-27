@@ -1,6 +1,6 @@
 import { useState, useEffect,useRef } from 'react'
 
-import { fetchFromJson, isValidColor, removeDuplicates } from './utils'
+import { fetchFromJson, isValidColor, removeDuplicates, generateRandomColor } from './utils'
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
@@ -69,10 +69,7 @@ function App() {
     }
   }
 
-  const generateRandomColor = () => {
-    return '#' + Math.floor(Math.random()*16777215).toString(16);
-  };
-  
+
   const randomButtonHandler = () => {
     const randomBgColor = generateRandomColor()
     const randomTextColor = generateRandomColor()
