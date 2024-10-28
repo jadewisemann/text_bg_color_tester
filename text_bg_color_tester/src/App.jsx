@@ -1,6 +1,6 @@
-import { useState, useEffect,useRef } from 'react'
+import { useState, useEffect } from 'react'
 
-import { fetchFromJson, isValidColor, removeDuplicates, generateRandomColor } from './utils'
+import { fetchFromJson, isValidColor, removeDuplicates, generateRandomColor, isDuplicateColor } from './utils'
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
@@ -8,28 +8,29 @@ import ColorSelectionButton from './components/ColorSelectionButton'
 import './App.css'
 import './IBM_Plex_Sans.css'
 
-const initialColors = JSON.parse(localStorage.getItem('colors')) || [
+const localStorageColors = JSON.parse(localStorage.getItem('colors')) || [
   { textColor: 'black', bgColor: 'yellow' },
   { textColor: 'white', bgColor: 'blue' },
 ]
 
 function App() {  
   
-  const [colors, setColors] = useState(initialColors);
+  const [jsonColors, setJsonColors] = useState([])
+  const [colors, setColors] = useState(localStorageColors);
+
   const [textColor, setTextColor] = useState('white');
   const [bgColor, setBgColor] = useState('black');
 
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] = useState('')
   
-  const [jsonColors, setJsonColors] = useState([])
   
 
   useEffect(() => {
     const loadColors = async () => {
       const jsonColors = await fetchFromJson('/color-combination.json');
       setJsonColors(jsonColors)
-      setColors(removeDuplicates([...jsonColors, ...initialColors]))
+      setColors(removeDuplicates([...jsonColors, ...localStorageColors]))
     };
 
     loadColors();
@@ -53,23 +54,32 @@ function App() {
   }
 
   const handleColorChange = (paramTextColor, paramBgColor) => {
-    if (isValidColor(paramTextColor)) setTextColor(paramTextColor)
-    if (isValidColor(paramBgColor)) setBgColor(paramBgColor)
+    if (isValidColor(paramTextColor) && isValidColor(paramBgColor)) {
+      setTextColor(paramTextColor);
+      setNewTextColor(paramTextColor)
+      setBgColor(paramBgColor)
+      setNewBgColor(paramBgColor)
+    }
   };
   
   const addColor = () => {
-    if (isValidColor(newTextColor) && isValidColor(newBgColor)) {
-      const updatedColors = [...colors, { textColor: newTextColor, bgColor: newBgColor }];
-      setColors(updatedColors); 
-      localStorage.setItem('colors', JSON.stringify(updatedColors));
-      setNewTextColor('');
-      setNewBgColor('');
-    } else {
-      alert("hex error")
+    if (!isValidColor(newTextColor) || !isValidColor(newBgColor)){
+    // if (![newTextColor, newBgColor].every(isValidColor)) {
+      return alert("hex error")
+    } 
+    if (isDuplicateColor(colors, newTextColor, newBgColor)) { 
+      return alert("duplicate colors")
     }
+    
+    const updatedColors = [...colors, { textColor: newTextColor, bgColor: newBgColor }];
+    setColors(updatedColors); 
+    localStorage.setItem('colors', JSON.stringify(updatedColors));
+    setNewTextColor('');
+    setNewBgColor('');
   }
 
 
+  
   const randomButtonHandler = () => {
     const randomBgColor = generateRandomColor()
     const randomTextColor = generateRandomColor()

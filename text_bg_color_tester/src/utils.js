@@ -36,4 +36,12 @@ export const isValidColor = color =>
 export const generateRandomColor = () => {
   return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 };
+
+export const isDuplicateColor = (colors, newTextColor, newBgColor) => {
+  return colors.some(
+    (color) =>
+      color.textColor.toLowerCase() === newTextColor.toLowerCase() &&
+      color.bgColor.toLowerCase() === newBgColor.toLowerCase()
+  );
+};
   
