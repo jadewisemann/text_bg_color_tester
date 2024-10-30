@@ -2,8 +2,7 @@ export const fetchFromJson = async (domain) => {
   try {
     const response = await fetch(domain);
     const data = await response.json();
-    const updateData = removeDuplicates(data)
-    return updateData
+    return data
   } catch (error) {
     console.error('Failed to load colors:', error);
     return []

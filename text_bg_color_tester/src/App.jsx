@@ -15,8 +15,8 @@ const localStorageColors = JSON.parse(localStorage.getItem('colors')) || [
   { textColor: 'white', bgColor: 'blue' },
 ]
 
-
-const fonts = ['ibm-plex-sans', 'noto-sans-kr'];
+// todo
+// 동적 폰트 셀렉터
 
 
 function App() {  
@@ -30,16 +30,26 @@ function App() {
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] = useState('')
   
+  const [fonts, setFonts] = useState([])
   const [selectedFontClass, setSelectedFontClass] = useState( 'ibm-plex-sans' ) 
+  
 
   useEffect(() => {
+
     const loadColors = async () => {
-      const jsonColors = await fetchFromJson('/color-combination.json');
-      setJsonColors(jsonColors)
-      setColors(removeDuplicates([...jsonColors, ...localStorageColors]))
+      const loadedJsonColors = await fetchFromJson('/color-combination.json');
+      setJsonColors(loadedJsonColors)
+      setColors(removeDuplicates([...loadedJsonColors, ...localStorageColors]))
+    };
+
+    const loadFontFamilies = async () => {
+      const loadedJsonFonts = await fetchFromJson('/fonts.json');
+      setFonts(loadedJsonFonts)
     };
 
     loadColors();
+    loadFontFamilies();
+    console.log(fonts)
   }, []);
 
   const handleFontChange = (font) => {

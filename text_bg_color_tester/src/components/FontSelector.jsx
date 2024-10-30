@@ -10,8 +10,8 @@ const FontSelector = ({ fonts=[], onFontChange }) => {
         Select a font
       </option>
       {fonts.map((font) => (
-        <option key={font} value={font}>
-          {font}
+        <option key={font.family} value={font.family}>
+          {font.name}
         </option>
       ))}
     </select>
