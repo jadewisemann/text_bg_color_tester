@@ -43,4 +43,18 @@ export const isDuplicateColor = (colors, newTextColor, newBgColor) => {
       color.bgColor.toLowerCase() === newBgColor.toLowerCase()
   );
 };
+
+
+// utils/loadFont.js
+export const loadFontWithAPI = (fontFamily, fontUrl) => {
+  const font = new FontFace(fontFamily, `url(${fontUrl})`);
   
+  return font.load()
+    .then(loadedFont => {
+      document.fonts.add(loadedFont);
+      console.log(`Font loaded: ${fontFamily}`);
+    })
+    .catch(error => {
+      console.error(`Font failed to load: ${fontFamily}, ${error}`);
+    });
+};
