@@ -96,6 +96,21 @@ function App() {
     setNewBgColor('');
   }
 
+  const removeColor = (colors, paramTextColor, paramBgColor) => {
+    const updatedColors = colors.filter(color => {
+      return !(color.textColor === paramTextColor && color.bgColor === paramBgColor)
+    });
+
+    setColors(updatedColors)
+  }
+  
+  const removeColorHandler = () => {
+    if (newTextColor === textColor && newBgColor === bgColor) {
+      removeColor(colors, newTextColor, newBgColor)
+      setNewBgColor('')
+      setNewTextColor('')
+    }
+  }
 
   
   const randomButtonHandler = () => {
@@ -105,6 +120,7 @@ function App() {
     setNewTextColor(randomTextColor);
     setNewBgColor(randomBgColor);
   }
+
 
   
 
@@ -192,6 +208,7 @@ function App() {
         </div>
 
         <button onClick={addColor}>Add Color</button>
+        <button onClick={removeColorHandler}> remove Color</button>
       </div>
       
       <div>
