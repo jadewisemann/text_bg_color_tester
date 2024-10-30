@@ -24,14 +24,14 @@ function App() {
   const [jsonColors, setJsonColors] = useState([])
   const [colors, setColors] = useState(localStorageColors);
 
-  const [textColor, setTextColor] = useState('white');
-  const [bgColor, setBgColor] = useState('black');
+  const [textColor, setTextColor] = useState('black');
+  const [bgColor, setBgColor] = useState('white');
 
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] = useState('')
   
   const [fonts, setFonts] = useState([])
-  const [selectedFontClass, setSelectedFontClass] = useState( 'ibm-plex-sans' ) 
+  const [selectedFont, setSelectedFont] = useState( 'ibm-plex-sans' ) 
   
 
   useEffect(() => {
@@ -49,11 +49,10 @@ function App() {
 
     loadColors();
     loadFontFamilies();
-    console.log(fonts)
   }, []);
 
   const handleFontChange = (font) => {
-    setSelectedFontClass(font);
+    setSelectedFont(font);
   };
 
 
@@ -114,9 +113,9 @@ function App() {
       <h1>title</h1>
       <div>font name</div>
       <div>font selector</div>
-      <FontSelector fonts={fonts} onFontChange={handleFontChange} />
+      <FontSelector fonts={fonts} onFontChange={handleFontChange} selectedFont={selectedFont}/>
       <div>example selector</div>
-      <div className={`test-text ${selectedFontClass}`} style={{ background: bgColor, color: textColor}}>
+      <div className={`test-text ${selectedFont}`} style={{ background: bgColor, color: textColor}}>
         <p className='test-text' style={{ }}>
           Aa Bb Cc Dd 가나다라마바사 ABC 12345!@#$% <br/>
           QUICK BROWN FOX JUMPS OVER THE LAZY DOG <br/>

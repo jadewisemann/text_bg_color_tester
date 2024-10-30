@@ -1,14 +1,11 @@
-const FontSelector = ({ fonts=[], onFontChange }) => {
+const FontSelector = ({ fonts=[], onFontChange, selectedFont }) => {
 
   const handleChange = (event) => {
     onFontChange(event.target.value);
   };
 
   return (
-    <select onChange={handleChange} defaultValue="">
-      <option value="" disabled>
-        Select a font
-      </option>
+    <select onChange={handleChange} value={selectedFont}>
       {fonts.map((font) => (
         <option key={font.family} value={font.family}>
           {font.name}
