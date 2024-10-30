@@ -4,14 +4,20 @@ import { fetchFromJson, isValidColor, removeDuplicates, generateRandomColor, isD
 
 import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
+import FontSelector from './components/FontSelector'
 
 import './App.css'
-import './IBM_Plex_Sans.css'
+import './style/fonts/ibm-plex-sans.css'
+import './style/fonts/noto-sans-kr.css'
 
 const localStorageColors = JSON.parse(localStorage.getItem('colors')) || [
   { textColor: 'black', bgColor: 'yellow' },
   { textColor: 'white', bgColor: 'blue' },
 ]
+
+
+const fonts = ['ibm-plex-sans', 'noto-sans-kr'];
+
 
 function App() {  
   
@@ -24,7 +30,7 @@ function App() {
   const [newTextColor, setNewTextColor] =useState('')
   const [newBgColor, setNewBgColor] = useState('')
   
-  
+  const [selectedFontClass, setSelectedFontClass] = useState( 'ibm-plex-sans' ) 
 
   useEffect(() => {
     const loadColors = async () => {
@@ -35,6 +41,10 @@ function App() {
 
     loadColors();
   }, []);
+
+  const handleFontChange = (font) => {
+    setSelectedFontClass(font);
+  };
 
 
   const resetLocalStorage = (defaultColors) => {
@@ -64,7 +74,6 @@ function App() {
   
   const addColor = () => {
     if (!isValidColor(newTextColor) || !isValidColor(newBgColor)){
-    // if (![newTextColor, newBgColor].every(isValidColor)) {
       return alert("hex error")
     } 
     if (isDuplicateColor(colors, newTextColor, newBgColor)) { 
@@ -92,17 +101,20 @@ function App() {
 
   return (
     <>
-      <h1>Text Bg Color Tester</h1>
-      <div className="card" style={{  background: bgColor}}>
-        <p className='test-text ibm-plex-sans-medium' style={{ color: textColor  }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      <h1>title</h1>
+      <div>font name</div>
+      <div>font selector</div>
+      <FontSelector fonts={fonts} onFontChange={handleFontChange} />
+      <div>example selector</div>
+      <div className={`test-text ${selectedFontClass}`} style={{ background: bgColor, color: textColor}}>
+        <p className='test-text' style={{ }}>
+          Aa Bb Cc Dd 가나다라마바사 ABC 12345!@#$% <br/>
+          QUICK BROWN FOX JUMPS OVER THE LAZY DOG <br/>
+          quick brown fox jumps over the lazy dog <br/>
+          키스의 고유조건은 입술끼리 만나야 하고 기술은 필요치 않다.<br/>
+          1234567890!@#$%^&*()
         </p>
-  
-        <p className='test-text ibm-plex-sans-bold' style={{ color: textColor  }}>
-          위기와 의혹에서 여성에 14일 경우의, 제대로 분쟁이는 질서로 하지, 확실하다. 압박의 11분 던지다 씨 보이는 주인은, 필요하다. 이대로 야당을 체제를 한자의 시장이어도 수출과 늘다. 촉구를 입시의 이번에 지시는 있다 코너와 계기에게 가장이 강조하다. 불구할 국제무대의, 한복판의 있어 집중으로 남자를 업계가 이는 만연한다. 하여 단계가 과거로, 주석직에 위험한 고려하다. "주민의 느림보에 남은 방지한 혈액마다 간접이 고철을 지역의 지나게 미묘하다" "씨 폭발의 달리어서 방식이 회관과 배우다 고에 없지만 주다" 이의 투하된, 뇌의 서로 동원으로 거기에게 확장 생각된 결코 해결한다.
-        </p>
-
-        <LoremIpsum sentenceCount={3} className='test-text ibm-plex-sans-bold' style={{ color: textColor  }} />
+        <LoremIpsum sentenceCount={3} className='test-text' style={{   }} />
       </div>
       
       <p className="read-the-docs">
