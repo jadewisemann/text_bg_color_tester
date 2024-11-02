@@ -37,12 +37,10 @@ const MiniColorPicker = () => {
       let top = triggerRect.bottom + window.scrollY + 8;
       let left = triggerRect.left + window.scrollX;
 
-      // 수직 방향 조정
       if (top + popoverRect.height > viewportHeight) {
         top = triggerRect.top + window.scrollY - popoverRect.height - 8;
       }
 
-      // 수평 방향 조정
       if (left + popoverRect.width > viewportWidth) {
         left = viewportWidth - popoverRect.width - 8;
       }

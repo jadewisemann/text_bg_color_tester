@@ -98,15 +98,17 @@
   display:flex;
   flex-direction: column;
   margin-top: 12px;
-  margin-left: 12px;
 }
 
 .manual-input {
+  margin-left: 12px;
 
 }
 
 .buttons {
   display: flex;
+  margin-left: 12px;
+  
 }
 
 
@@ -115,3 +117,11 @@
   height: 100%;
   background-color: #ccc;
 }
+
+
+body {
+  margin: 0;
+  padding: 50px;
+  font: normal 18px/1.4 Arial, sans-serif;
+}
+

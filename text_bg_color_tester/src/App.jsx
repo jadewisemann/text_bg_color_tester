@@ -10,6 +10,8 @@ import {
 // import LoremIpsum from './components/LoremIpsum'
 import ColorSelectionButton from './components/ColorSelectionButton'
 import FontSelector from './components/FontSelector'
+import PopoverPicker from './components/PopoverPicker'
+
 // css
 import './App.css'
 // css  fonts
@@ -28,7 +30,10 @@ const localStorageColors = JSON.parse(localStorage.getItem('colors')) || [ ]
 // font loading api 적용
 
 // 배경은 텍스트만 바꾸지 말고 전체 배경
-// 폰트도 모든 폰트 색상 변경 
+// 폰트도 모든 폰트 색상 변경
+// 배경색 변경시 부드러운 색상 전환
+
+
 
 function App() {  
   
@@ -44,6 +49,8 @@ function App() {
   const [fonts, setFonts] = useState([])
   const [selectedFont, setSelectedFont] = useState( 'ibm-plex-sans' ) 
   
+  const [color, setColor] = useState("#aabbcc");
+
 
   useEffect(() => {
 
@@ -196,49 +203,11 @@ function App() {
           <div className='vertical-divider'/>
           <div className='input-container'>
             <div className="manual-input">
-              <div className='text-color-input'>
-                <input
-                  type="color"
-                  value={newTextColor}
-                  onChange={(e) => {
-                    setNewTextColor(e.target.value);
-                    handleColorChange(e.target.value, bgColor);
-                  }}
-                />
-
-                <input
-                  type="text"
-                  placeholder="#000000"
-                  value={newTextColor}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setNewTextColor(value);
-                    handleColorChange(value, bgColor);
-                  }}
-                  maxLength={7}
-                />
+              <div className='input-wrapper'>
+                <PopoverPicker color={color} onChange={setColor} />
+                <PopoverPicker color={color} onChange={setColor} />
               </div>
-              <div className='bg-color-input'>
-                <input
-                  type="color"
-                  value={newBgColor}
-                  onChange={(e) => {
-                    setNewBgColor(e.target.value);
-                    handleColorChange(textColor, e.target.value);
-                  }}
-                />
-                
-                <input
-                  type="text"
-                  placeholder="#FFFFFF"
-                  value={newBgColor}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setNewBgColor(value);
-                    handleColorChange(textColor, value);
-                  }}
-                  maxLength={7}
-                />
+              <div className='input-wrapper'>
               </div>
             </div>
             
